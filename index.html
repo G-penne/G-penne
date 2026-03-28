@@ -20,11 +20,25 @@
             padding: 40px 0;
             border-bottom: 2px solid #e67e22;
         }
+        /* --- ロゴ追加用のスタイル（ここを追加） --- */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .logo-image {
+            width: 60px; /* ロゴのサイズ調整 */
+            height: auto;
+        }
+        /* -------------------------------------- */
         h1 {
             color: #d35400; /* トマトソースのような色 */
             font-size: 2.5rem;
             margin-bottom: 10px;
             letter-spacing: 2px;
+            margin-top: 0; /* ロゴとのバランス調整 */
         }
         .subtitle {
             color: #7f8c8d;
@@ -107,7 +121,10 @@
 <body>
 
     <header>
-        <h1>地を這うペンネモンスター教</h1>
+        <div class="logo-wrapper">
+            <img src="logo_icon.png" alt="G-penne Logo" class="logo-image">
+            <h1>地を這うペンネモンスター教</h1>
+        </div>
         <p class="subtitle">Ground-Crawling Penne</p>
     </header>
 
@@ -158,6 +175,9 @@
         <p>&copy; 2026 tus_penne. All Rights Reserved.</p>
         <p>May the Penne be with you. (ペンネが共にあらんことを)</p>
     </footer>
+
+</body>
+</html>
 
 </body>
 </html>

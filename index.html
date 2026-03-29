@@ -122,59 +122,82 @@
         }
         .pdf-btn { display: inline-block; background-color: #d35400; color: white !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px #a04000; }
 
-        /* 回転ペンネコンテナ */
+        /* --- 立体感のある回転ペンネのスタイル（ここを大幅修正） --- */
 .rotating-penne-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px; /* コンテナの高さ */
-    margin-bottom: 10px;
+    height: 180px; /* コンテナの高さを調整 */
+    margin-bottom: 20px;
+    perspective: 1000px; /* 3D空間の奥行きを追加 */
 }
 
-/* ペンネ本体のベース（3D効果のためのコンテキスト） */
+/* ペンネ本体（立体感とボリュームを増やす） */
 .penne-b {
     position: relative;
-    width: 30px; /* ペンネの太さ */
-    height: 100px; /* ペンネの長さ */
-    background: #f1c40f; /* パスタクリーム色 */
+    width: 40px; /* ペンネの太さを増やす */
+    height: 120px; /* ペンネの長さを増やす */
+    background: radial-gradient(circle at 30% 30%, #f1c40f, #f39c12); /* 光沢を表現 */
+    border-radius: 20px; /* 筒状の曲面を表現 */
     transform-style: preserve-3d;
-    animation: penne-rotate 8s linear infinite; /* 回転アニメーション */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 影 */
+    animation: penne-rotate 10s linear infinite; /* 回転アニメーション */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* より深い影 */
 }
 
-/* ペンネの斜めカット部分（両端） */
+/* ペンネの斜めカット部分（両端。楕円にして厚みを出す） */
 .penne-s, .penne-s::after {
     content: '';
     position: absolute;
-    width: 30px;
-    height: 15px;
-    background: #f39c12; /* 少し濃い色でカット面を表現 */
+    width: 40px;
+    height: 25px; /* 厚みを増やす */
+    background: #e67e22; /* より濃い色で断面を表現 */
+    border-radius: 50%; /* 楕円形にして筒状を表現 */
+    transform-style: preserve-3d;
+}
+.penne-s {
+    top: -12.5px;
     transform: rotateX(45deg);
 }
-.penne-s { top: -7.5px; } /* 上端 */
-.penne-s::after { bottom: -150px; transform: rotateX(-45deg); } /* 下端 */
+.penne-s::after {
+    bottom: -132.5px; /* 下端の配置を調整 */
+    transform: rotateX(-45deg);
+}
 
-/* ペンネの溝（Rigate） */
+/* カット面の厚み（パスタの厚みを表現する） */
+.penne-s::before, .penne-s::after::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 15px;
+    background: #fdfbf7; /* 内側は少し明るい色 */
+    border-radius: 50%;
+}
+
+/* ペンネの溝（Rigate。平面的な線から、凹凸のある線にする） */
 .penne-rigate, .penne-rigate-r {
     position: absolute;
     width: 100%;
     height: 100%;
     background: repeating-linear-gradient(
         90deg,
-        rgba(0,0,0,0.05),
-        rgba(0,0,0,0.05) 1px,
+        rgba(0,0,0,0.1), /* 溝の影 */
+        rgba(0,0,0,0.1) 1px,
         transparent 1px,
-        transparent 4px
+        transparent 5px /* 溝の間隔 */
     );
+    border-radius: 20px;
 }
-.penne-rigate { transform: translateZ(1px); } /* 表面の溝 */
-.penne-rigate-r { transform: translateZ(-1px) rotateY(180deg); } /* 裏面の溝 */
+.penne-rigate { transform: translateZ(2px); } /* 表面の溝を前に出す */
+.penne-rigate-r { transform: translateZ(-2px) rotateY(180deg); } /* 裏面の溝 */
 
-/* 回転アニメーションの定義 */
+/* 回転アニメーションの定義（少し傾きを加えて、多角的に見せる） */
 @keyframes penne-rotate {
-    0% { transform: rotateY(0deg) rotateX(10deg); }
-    100% { transform: rotateY(360deg) rotateX(10deg); }
+    0% { transform: rotateY(0deg) rotateX(15deg); }
+    100% { transform: rotateY(360deg) rotateX(15deg); }
 }
+/* ------------------------------------------------------------ */
     </style>
 </head>
 <body>
@@ -213,7 +236,7 @@
             </div>
             <div class="card">
                 <h3>地の理（Stay Grounded）</h3>
-                <p>高く飛ばず、現実に根ざし、一歩ずつ確実に「アルデンテ」な人生を歩みます。</p>
+                <p>高く飛ばず、現実に根ざし,一歩ずつ確実に「アルデンテ」な人生を歩みます。</p>
             </div>
             <div class="card">
                 <h3>不屈の芯</h3>

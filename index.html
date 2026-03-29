@@ -35,6 +35,18 @@
             width: 60px; /* ロゴのサイズ調整 */
             height: auto;
         }
+        <header>
+    <div class="lang-switch"> ... </div>
+
+    <div class="rotating-penne-container">
+        <div class="penne-b">
+            <div class="penne-s"></div>
+            <div class="penne-rigate"></div>
+            <div class="penne-rigate-r"></div>
+        </div>
+    </div>
+
+    <div class="logo-wrapper"> ... </div>
         /* -------------------------------------- */
         h1 {
             color: #d35400; /* トマトソースのような色 */
@@ -120,6 +132,60 @@
             text-align: center;
         }
         .pdf-btn { display: inline-block; background-color: #d35400; color: white !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px #a04000; }
+
+        /* 回転ペンネコンテナ */
+.rotating-penne-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px; /* コンテナの高さ */
+    margin-bottom: 10px;
+}
+
+/* ペンネ本体のベース（3D効果のためのコンテキスト） */
+.penne-b {
+    position: relative;
+    width: 30px; /* ペンネの太さ */
+    height: 100px; /* ペンネの長さ */
+    background: #f1c40f; /* パスタクリーム色 */
+    transform-style: preserve-3d;
+    animation: penne-rotate 8s linear infinite; /* 回転アニメーション */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* 影 */
+}
+
+/* ペンネの斜めカット部分（両端） */
+.penne-s, .penne-s::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: #f39c12; /* 少し濃い色でカット面を表現 */
+    transform: rotateX(45deg);
+}
+.penne-s { top: -7.5px; } /* 上端 */
+.penne-s::after { bottom: -150px; transform: rotateX(-45deg); } /* 下端 */
+
+/* ペンネの溝（Rigate） */
+.penne-rigate, .penne-rigate-r {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(0,0,0,0.05),
+        rgba(0,0,0,0.05) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+}
+.penne-rigate { transform: translateZ(1px); } /* 表面の溝 */
+.penne-rigate-r { transform: translateZ(-1px) rotateY(180deg); } /* 裏面の溝 */
+
+/* 回転アニメーションの定義 */
+@keyframes penne-rotate {
+    0% { transform: rotateY(0deg) rotateX(10deg); }
+    100% { transform: rotateY(360deg) rotateX(10deg); }
+}
     </style>
 </head>
 <body>

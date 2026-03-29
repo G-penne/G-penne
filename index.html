@@ -122,93 +122,63 @@
         }
         .pdf-btn { display: inline-block; background-color: #d35400; color: white !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px #a04000; }
 
-        /* --- 立体感のある回転ペンネのスタイル（ここを大幅修正） --- */
-.rotating-penne-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 180px; /* コンテナの高さを調整 */
-    margin-bottom: 20px;
-    perspective: 1000px; /* 3D空間の奥行きを追加 */
-}
+        /* ============================================================
+           ★ 超リアル・真の3D回転ペンネ・システム（大幅修正） ★
+           ============================================================ */
+        .rotating-penne-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 220px; /* ボリュームに合わせて高さを確保 */
+            margin-bottom: 20px;
+            perspective: 2000px; /* 強力な奥行き感を設定 */
+            overflow: hidden;
+        }
 
-/* ペンネ本体（立体感とボリュームを増やす） */
-.penne-b {
-    position: relative;
-    width: 40px; /* ペンネの太さを増やす */
-    height: 120px; /* ペンネの長さを増やす */
-    background: radial-gradient(circle at 30% 30%, #f1c40f, #f39c12); /* 光沢を表現 */
-    border-radius: 20px; /* 筒状の曲面を表現 */
-    transform-style: preserve-3d;
-    animation: penne-rotate 10s linear infinite; /* 回転アニメーション */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* より深い影 */
-}
+        /* 3D空間のベース */
+        .penne-3d-space {
+            position: relative;
+            width: 0; 
+            height: 0;
+            transform-style: preserve-3d;
+            /* 常に少し傾けて全体像を見せる */
+            transform: rotateX(-15deg) rotateY(0deg);
+            animation: penne-final-rotate 12s linear infinite;
+        }
 
-/* ペンネの斜めカット部分（両端。楕円にして厚みを出す） */
-.penne-s, .penne-s::after {
-    content: '';
-    position: absolute;
-    width: 40px;
-    height: 25px; /* 厚みを増やす */
-    background: #e67e22; /* より濃い色で断面を表現 */
-    border-radius: 50%; /* 楕円形にして筒状を表現 */
-    transform-style: preserve-3d;
-}
-.penne-s {
-    top: -12.5px;
-    transform: rotateX(45deg);
-}
-.penne-s::after {
-    bottom: -132.5px; /* 下端の配置を調整 */
-    transform: rotateX(-45deg);
-}
+        /* JavaScriptで生成されるポリゴン（div）の共通スタイル */
+        .penne-facet {
+            position: absolute;
+            background-color: #f1c40f; /* パスタの基本色 */
+            /* リアルな溝（Rigate）の質感 */
+            background-image: repeating-linear-gradient(
+                90deg,
+                rgba(0,0,0,0) 0px,
+                rgba(0,0,0,0) 2px,
+                rgba(0,0,0,0.1) 2px, /* 溝の影 */
+                rgba(0,0,0,0.1) 3px,
+                rgba(255,255,255,0.1) 3px, /* 溝のハイライト */
+                rgba(255,255,255,0.1) 4px
+            );
+            /* 光沢と影を滑らかに表現するためのトランジション */
+            transition: background-color 0.1s linear;
+            backface-visibility: hidden; /* 裏面を隠して描画を正常化 */
+        }
 
-/* カット面の厚み（パスタの厚みを表現する） */
-.penne-s::before, .penne-s::after::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 15px;
-    background: #fdfbf7; /* 内側は少し明るい色 */
-    border-radius: 50%;
-}
-
-/* ペンネの溝（Rigate。平面的な線から、凹凸のある線にする） */
-.penne-rigate, .penne-rigate-r {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        90deg,
-        rgba(0,0,0,0.1), /* 溝の影 */
-        rgba(0,0,0,0.1) 1px,
-        transparent 1px,
-        transparent 5px /* 溝の間隔 */
-    );
-    border-radius: 20px;
-}
-.penne-rigate { transform: translateZ(2px); } /* 表面の溝を前に出す */
-.penne-rigate-r { transform: translateZ(-2px) rotateY(180deg); } /* 裏面の溝 */
-
-/* 回転アニメーションの定義（少し傾きを加えて、多角的に見せる） */
-@keyframes penne-rotate {
-    0% { transform: rotateY(0deg) rotateX(15deg); }
-    100% { transform: rotateY(360deg) rotateX(15deg); }
-}
-/* ------------------------------------------------------------ */
+        /* 回転とライティングのアニメーション */
+        @keyframes penne-final-rotate {
+            0% { transform: rotateX(-15deg) rotateY(0deg); }
+            100% { transform: rotateX(-15deg) rotateY(360deg); }
+        }
+        /* ============================================================ */
     </style>
 </head>
 <body>
 
     <header>
         <div class="rotating-penne-container">
-            <div class="penne-b">
-                <div class="penne-s"></div>
-                <div class="penne-rigate"></div>
-                <div class="penne-rigate-r"></div>
-            </div>
+            <div class="penne-3d-space" id="penneSpace">
+                </div>
         </div>
         <div class="logo-wrapper">
             <img src="logo_icon.png" alt="G-penne Logo" class="logo-image">
@@ -276,6 +246,68 @@
         <p>May the Penne be with you. (ペンネが共にあらんことを)</p>
     </footer>
 
+    <script>
+        (function createTrue3DPenne() {
+            const space = document.getElementById('penneSpace');
+            const facets = 24; // ポリゴン数（多いほど滑らか）
+            const radius = 25; // ペンネの半径
+            const height = 140; // ペンネの長さ
+            const angleStep = 360 / facets;
+            const facetWidth = 2 * radius * Math.tan(Math.PI / facets) + 1; // 隙間を埋めるため+1
+            const clipAngle = 45; // 斜めカットの角度
+
+            for (let i = 0; i < facets; i++) {
+                const angle = i * angleStep;
+                const radians = angle * (Math.PI / 180);
+                
+                // div要素（ポリゴン）の生成
+                const facet = document.createElement('div');
+                facet.className = 'penne-facet';
+                
+                // 位置と3D回転の設定
+                facet.style.width = facetWidth + 'px';
+                facet.style.height = height + 'px';
+                facet.style.left = (-facetWidth / 2) + 'px';
+                facet.style.top = (-height / 2) + 'px';
+                
+                // 筒状に配置し、溝を縦方向にするためrotateZ
+                facet.style.transform = `rotateY(${angle}deg) translateZ(${radius}px) rotateZ(90deg)`;
+
+                // 溝のグラデーションの向きを調整
+                facet.style.backgroundImage = `repeating-linear-gradient(
+                    0deg,
+                    rgba(0,0,0,0) 0px,
+                    rgba(0,0,0,0) 2px,
+                    rgba(0,0,0,0.15) 2px,
+                    rgba(0,0,0,0.15) 3px,
+                    rgba(255,255,255,0.1) 3px,
+                    rgba(255,255,255,0.1) 4px
+                )`;
+
+                // ★ 真の3Dカット表現：clip-pathで各ポリゴンを斜めに切る ★
+                // 角度によってカットの高さが変わるのを計算
+                const offset = radius * Math.cos(radians) * Math.tan(clipAngle * Math.PI / 180);
+                const percentOffset = (offset / height) * 100;
+                
+                const topCut = 15 + percentOffset;
+                const bottomCut = 85 + percentOffset;
+                
+                // 四角形を斜めの平行四辺形にクリップ
+                facet.style.clipPath = `polygon(0% ${topCut}%, 100% ${topCut}%, 100% ${bottomCut}%, 0% ${bottomCut}%)`;
+
+                // ★ リアルなライティング：JavaScriptで角度に応じた影を付ける ★
+                const lightAngle = (angle + 90) % 360;
+                const brightness = Math.cos(lightAngle * Math.PI / 180); // -1〜1
+                
+                // 基本色（#f1c40f）をベースに暗くしていく
+                const r = 241, g = 196, b = 15;
+                const shadowFactor = 0.5 + (brightness + 1) / 4; // 0.5〜1.0の間で調整
+                facet.style.backgroundColor = `rgb(${r * shadowFactor}, ${g * shadowFactor}, ${b * shadowFactor})`;
+
+                space.appendChild(facet);
+            }
+        })();
+    </script>
 </body>
 </html>
 

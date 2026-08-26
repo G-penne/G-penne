@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペンネ司祭認定証 | 地を這うペンネモンスター教</title>
+<meta name="description" content="地を這うペンネモンスター教への入信を証明する、名前入りの認定証をその場で作成できます。印刷・PDF保存にも対応。">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://g-penne.github.io/G-penne/certificate.html">
+<meta property="og:title" content="ペンネ司祭認定証 | 地を這うペンネモンスター教">
+<meta property="og:description" content="あなたの名前入りで、ペンネ司祭認定証をその場で発行できます。">
+<meta property="og:image" content="https://g-penne.github.io/G-penne/og_image.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="地を這うペンネモンスター教">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ペンネ司祭認定証">
+<meta name="twitter:description" content="あなたの名前入りで、ペンネ司祭認定証をその場で発行できます。">
+<meta name="twitter:image" content="https://g-penne.github.io/G-penne/og_image.jpg">
+
+<link rel="canonical" href="https://g-penne.github.io/G-penne/certificate.html">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+
+<style>
+  :root{
+    --page-bg:#efe6d2;
+    --ink:#2b241d;
+    --ink-soft:#5c5347;
+    --muted:#8f8375;
+    --accent:#c9531f;
+    --panel:#fbf6ea;
+    --line:#e6dccb;
+
+    /* the certificate itself is a fixed physical object: always parchment, in any theme */
+    --paper:#faf3df;
+    --paper-ink:#2e2417;
+    --paper-ink-soft:#6b5c42;
+    --gold:#b6862c;
+    --gold-deep:#8a631c;
+    --seal:#a5391c;
+    --paper-line:#d8c39a;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Shippori+Mincho:wght@500;700&family=Noto+Serif+JP:wght@400;600&family=Yuji+Syuku&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page-bg);
+    color:var(--ink);
+    font-family:'Noto Serif JP', serif;
+  }
+
+  .shell{
+    max-width:1000px;
+    margin:0 auto;
+    padding:40px 20px 80px;
+  }
+
+  .back-link{
+    display:inline-block;
+    margin-bottom:24px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    font-size:0.9rem;
+    border-bottom:1px solid var(--line);
+    padding-bottom:2px;
+  }
+  .back-link:hover{color:var(--accent); border-color:var(--accent);}
+
+  .toolbar{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 24px;
+    margin-bottom:32px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    align-items:flex-end;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1 1 180px;
+  }
+  .field label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .field input{
+    font-family:'Noto Serif JP', serif;
+    font-size:0.95rem;
+    padding:9px 12px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--page-bg);
+    color:var(--ink);
+  }
+  .field input:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+
+  .print-btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    background:var(--accent);
+    color:#fff8ee;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .print-btn:hover{filter:brightness(1.08);}
+  .print-btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  .hint{
+    width:100%;
+    font-size:0.8rem;
+    color:var(--muted);
+    margin-top:-6px;
+  }
+
+  /* ===== Certificate ===== */
+  .cert-stage{
+    display:flex;
+    justify-content:center;
+  }
+  .cert{
+    width:100%;
+    max-width:900px;
+    aspect-ratio:1.414 / 1;
+    background:var(--paper);
+    color:var(--paper-ink);
+    position:relative;
+    padding:26px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.28);
+    background-image:
+      radial-gradient(ellipse at 12% 10%, rgba(182,134,44,0.08), transparent 45%),
+      radial-gradient(ellipse at 88% 92%, rgba(165,57,28,0.06), transparent 45%);
+  }
+  .cert-border{
+    position:absolute;
+    inset:14px;
+    border:2px solid var(--gold);
+    padding:6px;
+  }
+  .cert-border::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border:1px solid var(--gold);
+    opacity:0.6;
+    pointer-events:none;
+  }
+  .cert-inner{
+    position:relative;
+    height:100%;
+    border:1px solid var(--paper-line);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:34px 48px 26px;
+  }
+
+  .corner{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border:2px solid var(--gold);
+  }
+  .corner.tl{top:-2px; left:-2px; border-right:none; border-bottom:none;}
+  .corner.tr{top:-2px; right:-2px; border-left:none; border-bottom:none;}
+  .corner.bl{bottom:-2px; left:-2px; border-right:none; border-top:none;}
+  .corner.br{bottom:-2px; right:-2px; border-left:none; border-top:none;}
+
+  .seal-emblem{
+    width:56px;
+    height:56px;
+    opacity:0.9;
+    margin-bottom:6px;
+  }
+  .authority{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.62rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold-deep);
+    margin-bottom:14px;
+  }
+  .cert-title{
+    font-family:'Shippori Mincho', serif;
+    font-weight:700;
+    font-size:clamp(1.7rem, 4vw, 2.5rem);
+    letter-spacing:0.3em;
+    margin:0 0 4px;
+    padding-left:0.3em; /* optical centering for the letter-spacing */
+  }
+  .cert-subtitle{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--paper-ink-soft);
+    font-size:0.95rem;
+    letter-spacing:0.04em;
+    margin-bottom:26px;
+  }
+
+  .cert-body{
+    font-size:0.98rem;
+    line-height:2;
+    max-width:560px;
+    color:var(--paper-ink);
+  }
+  .recipient{
+    display:inline-block;
+    font-family:'Shippori Mincho', serif;
+    font-weight:700;
+    font-size:1.3rem;
+    border-bottom:1px solid var(--gold);
+    padding:0 10px 3px;
+    margin:10px 6px 4px;
+    min-width:200px;
+  }
+  .recipient.placeholder{color:var(--muted);}
+
+  .vows{
+    display:flex;
+    gap:22px;
+    margin:22px 0 20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.02em;
+    color:var(--paper-ink-soft);
+  }
+  .vows span::before{content:"◦ ";}
+
+  .quote{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:0.92rem;
+    color:var(--paper-ink-soft);
+    max-width:480px;
+    margin:4px 0 auto;
+  }
+
+  .cert-footer{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-top:auto;
+    padding-top:18px;
+  }
+  .footer-block{
+    text-align:left;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem;
+    color:var(--paper-ink-soft);
+    line-height:1.9;
+  }
+  .footer-block.right{text-align:right;}
+  .footer-block .k{color:var(--gold-deep); letter-spacing:0.06em;}
+
+  .signature{
+    font-family:'Yuji Syuku', cursive;
+    font-size:1.5rem;
+    color:var(--seal);
+    line-height:1;
+    margin-bottom:4px;
+  }
+  .sig-title{
+    font-family:'Shippori Mincho', serif;
+    font-size:0.78rem;
+    color:var(--paper-ink);
+  }
+
+  .fineprint{
+    margin-top:14px;
+    font-size:0.56rem;
+    color:var(--paper-ink-soft);
+    opacity:0.75;
+    letter-spacing:0.02em;
+  }
+
+  @media (max-width:640px){
+    .cert{aspect-ratio:auto; padding:18px;}
+    .cert-inner{padding:26px 20px 20px;}
+    .vows{flex-direction:column; gap:6px; align-items:center;}
+    .cert-footer{flex-direction:column; align-items:center; gap:14px; text-align:center;}
+    .footer-block, .footer-block.right{text-align:center;}
+  }
+
+  @media print{
+    body{background:#fff;}
+    .toolbar, .back-link{display:none;}
+    .shell{padding:0; max-width:none;}
+    .cert{box-shadow:none; max-width:none; width:100%; height:100vh; aspect-ratio:auto;}
+    @page{margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <a class="back-link" href="index.html">← ホームに戻る</a>
+
+  <div class="toolbar no-print">
+    <div class="field">
+      <label for="name">受任者名</label>
+      <input id="name" type="text" placeholder="例：山田 太郎" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="certno">認定番号</label>
+      <input id="certno" type="text">
+    </div>
+    <div class="field">
+      <label for="date">発行日</label>
+      <input id="date" type="text">
+    </div>
+    <button class="print-btn" id="printBtn">🖨 印刷 / PDF保存</button>
+    <p class="hint">名前を入力 →「印刷/PDF保存」でブラウザの印刷ダイアログから「PDFとして保存」を選ぶと、そのままお使いいただけます。</p>
+  </div>
+
+  <div class="cert-stage">
+    <div class="cert" id="cert">
+      <div class="cert-border">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <div class="cert-inner">
+
+          <img class="seal-emblem" src="logo_icon_header.png" alt="">
+          <div class="authority">Ground-Crawling Penne Monster Church — Office of Ordination</div>
+
+          <h1 class="cert-title">認&#8202;定&#8202;証</h1>
+          <p class="cert-subtitle">Certificate of Penne Ordination</p>
+
+          <div class="cert-body">
+            これは<br>
+            <span class="recipient" id="recipientDisplay">ここに氏名が入ります</span><br>
+            が、地を這うペンネモンスター教の教義を受け入れ、フォークを捨て、
+            自らペンネを突き刺す者としてここに認定されたことを証する。
+          </div>
+
+          <div class="vows">
+            <span>ソースとの一体化</span>
+            <span>地の理</span>
+            <span>不屈の芯</span>
+          </div>
+
+          <p class="quote">"May the Penne be with you."</p>
+
+          <div class="cert-footer">
+            <div class="footer-block">
+              <div><span class="k">認定番号</span> No. <span id="certnoDisplay">GCP-0000</span></div>
+              <div><span class="k">発行日</span> <span id="dateDisplay">2026.08.26</span></div>
+            </div>
+            <div class="footer-block right">
+              <div class="signature">教皇 penne rigato</div>
+              <div class="sig-title">初代教皇 ペンネ・リガート1世</div>
+            </div>
+          </div>
+
+          <p class="fineprint">本証は地を這うペンネモンスター教が発行するノベルティであり、いかなる法的効力も有しません。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const nameInput = document.getElementById('name');
+  const certnoInput = document.getElementById('certno');
+  const dateInput = document.getElementById('date');
+  const recipientDisplay = document.getElementById('recipientDisplay');
+  const certnoDisplay = document.getElementById('certnoDisplay');
+  const dateDisplay = document.getElementById('dateDisplay');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function randCertNo(){
+    const y = new Date().getFullYear();
+    const n = Math.floor(Math.random()*9000)+1000;
+    return `GCP-${y}-${n}`;
+  }
+  function todayStr(){
+    const d = new Date();
+    return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+  }
+
+  certnoInput.value = randCertNo();
+  dateInput.value = todayStr();
+  certnoDisplay.textContent = certnoInput.value;
+  dateDisplay.textContent = dateInput.value;
+
+  nameInput.addEventListener('input', () => {
+    const v = nameInput.value.trim();
+    recipientDisplay.textContent = v ? v + ' 様' : 'ここに氏名が入ります';
+    recipientDisplay.classList.toggle('placeholder', !v);
+  });
+  certnoInput.addEventListener('input', () => {
+    certnoDisplay.textContent = certnoInput.value.trim() || 'GCP-0000';
+  });
+  dateInput.addEventListener('input', () => {
+    dateDisplay.textContent = dateInput.value.trim() || todayStr();
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+</script>
+</body>
+</html>

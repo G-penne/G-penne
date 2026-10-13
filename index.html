@@ -355,8 +355,24 @@
             </div>
         </div>
     </section>
-    
-    
+
+    <section>
+        <h2 class="ja">🍝 ペンネ・キャッチャー</h2>
+        <div class="card" style="text-align: center; border-top: 4px solid #d35400;">
+            <p>空を舞うペンネはいない。だが、皿に落ちてくるペンネならいる。マウス（またはタッチ）で皿を操り、落ちてくるペンネを受け止めよ。5回落とすと教団からの審判が下る。</p>
+            <div style="margin-top: 15px;">
+                <canvas id="penne-game-canvas" width="320" height="420" style="background-color:#fffaf0; border: 2px solid #d35400; border-radius: 8px; max-width: 100%; touch-action: none; cursor: pointer;"></canvas>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.95rem;">
+                Score: <span id="penne-game-score">0</span>　Miss: <span id="penne-game-miss">0</span> / 5
+            </p>
+            <div style="margin-top: 10px;">
+                <button id="penne-game-start" class="pdf-btn" style="border:none; cursor:pointer; font-size:1rem;">▶ 布教を始める（ゲーム開始）</button>
+            </div>
+        </div>
+    </section>
+
+
     <blockquote>
         「迷える子羊たちよ、フォークを捨てよ。ペンネを突き刺し、その重厚なるソースの重みを感じるのだ。」<br>
         —— 初代教皇 ペンネ・リガート1世
@@ -366,6 +382,162 @@
         <p>&copy; 2026 tus_penne. All Rights Reserved.</p>
         <p>May the Penne be with you. (ペンネが共にあらんことを)</p>
     </footer>
+
+    <script>
+    (function() {
+        var canvas = document.getElementById('penne-game-canvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var scoreEl = document.getElementById('penne-game-score');
+        var missEl = document.getElementById('penne-game-miss');
+        var startBtn = document.getElementById('penne-game-start');
+
+        var W = canvas.width, H = canvas.height;
+        var plate = { w: 90, h: 14, x: W / 2 - 45, y: H - 30 };
+        var pennes = [];
+        var score = 0, miss = 0, running = false, spawnTimer = 0, rafId = null, lastTime = 0;
+        var maxMiss = 5;
+
+        function resetGame() {
+            score = 0; miss = 0; pennes = []; spawnTimer = 0;
+            scoreEl.textContent = score;
+            missEl.textContent = miss;
+        }
+
+        function spawnPenne() {
+            var w = 30, h = 14;
+            pennes.push({
+                x: Math.random() * (W - w),
+                y: -h,
+                w: w, h: h,
+                speed: 1.5 + Math.random() * 1.5 + score * 0.05,
+                rot: (Math.random() - 0.5) * 0.6
+            });
+        }
+
+        function drawPlate() {
+            ctx.save();
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#d35400';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(plate.x + plate.w / 2, plate.y + plate.h / 2, plate.w / 2, plate.h / 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawPenne(p) {
+            ctx.save();
+            ctx.translate(p.x + p.w / 2, p.y + p.h / 2);
+            ctx.rotate(p.rot);
+            ctx.fillStyle = '#f4c242';
+            ctx.strokeStyle = '#d35400';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(-p.w / 2, -p.h / 2, p.w, p.h, 6);
+            } else {
+                ctx.rect(-p.w / 2, -p.h / 2, p.w, p.h);
+            }
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.w / 2 - 5, p.h / 2 - 4, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#d49a2a';
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function update(dt) {
+            spawnTimer += dt;
+            var spawnInterval = Math.max(400, 1000 - score * 15);
+            if (spawnTimer > spawnInterval) {
+                spawnTimer = 0;
+                spawnPenne();
+            }
+            for (var i = pennes.length - 1; i >= 0; i--) {
+                var p = pennes[i];
+                p.y += p.speed;
+                var caught = p.y + p.h >= plate.y &&
+                             p.y <= plate.y + plate.h &&
+                             p.x + p.w > plate.x &&
+                             p.x < plate.x + plate.w;
+                if (caught) {
+                    pennes.splice(i, 1);
+                    score++;
+                    scoreEl.textContent = score;
+                } else if (p.y > H) {
+                    pennes.splice(i, 1);
+                    miss++;
+                    missEl.textContent = miss;
+                    if (miss >= maxMiss) {
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < pennes.length; i++) drawPenne(pennes[i]);
+            drawPlate();
+        }
+
+        function loop(time) {
+            if (!running) return;
+            var dt = time - lastTime;
+            lastTime = time;
+            update(dt);
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function startGame() {
+            resetGame();
+            running = true;
+            lastTime = performance.now();
+            startBtn.textContent = '🔄 リスタート';
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function endGame() {
+            running = false;
+            if (rafId) cancelAnimationFrame(rafId);
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('教団からの審判', W / 2, H / 2 - 20);
+            ctx.fillText('最終スコア: ' + score, W / 2, H / 2 + 10);
+            ctx.restore();
+            startBtn.textContent = '▶ もう一度布教する';
+        }
+
+        function movePlateTo(clientX) {
+            var rect = canvas.getBoundingClientRect();
+            var scale = W / rect.width;
+            var x = (clientX - rect.left) * scale;
+            plate.x = Math.min(Math.max(0, x - plate.w / 2), W - plate.w);
+        }
+
+        canvas.addEventListener('mousemove', function(e) {
+            movePlateTo(e.clientX);
+        });
+        canvas.addEventListener('touchmove', function(e) {
+            if (e.touches && e.touches[0]) {
+                movePlateTo(e.touches[0].clientX);
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        startBtn.addEventListener('click', startGame);
+
+        draw();
+    })();
+    </script>
 
 </body>
 </html>

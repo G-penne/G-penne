@@ -235,11 +235,129 @@
         .penne-face:nth-child(1), .penne-face:nth-child(2), .penne-face:nth-child(3) { filter: brightness(1.1); }
         .penne-face:nth-child(7), .penne-face:nth-child(8), .penne-face:nth-child(9) { filter: brightness(0.85); }
         /* ============================================================ */
+
+        /* ============================================================
+           ハンバーガーメニュー
+           ============================================================ */
+        html { scroll-behavior: smooth; }
+
+        .menu-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background-color: #d35400;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 0;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 15, 10, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 999;
+        }
+        .menu-overlay.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .site-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: min(78vw, 300px);
+            background-color: #fdfbf7;
+            box-shadow: -4px 0 16px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            padding: 80px 10px 30px;
+            overflow-y: auto;
+        }
+        .site-menu.is-open {
+            transform: translateX(0);
+        }
+        .site-menu a {
+            display: block;
+            padding: 14px 16px;
+            margin-bottom: 4px;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            border-left: 4px solid transparent;
+        }
+        .site-menu a:hover,
+        .site-menu a:focus {
+            background-color: #fcf3cf;
+            border-left-color: #d35400;
+            color: #d35400;
+        }
+        .site-menu .menu-highlight {
+            color: #fff !important;
+            background-color: #d35400;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .site-menu .menu-highlight:hover,
+        .site-menu .menu-highlight:focus {
+            background-color: #a04000;
+            color: #fff !important;
+        }
+        /* ============================================================ */
     </style>
 </head>
 <body>
 
-    <header>
+    <button id="menu-toggle" class="menu-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-menu">
+        <span></span><span></span><span></span>
+    </button>
+    <div id="menu-overlay" class="menu-overlay"></div>
+    <nav id="site-menu" class="site-menu" aria-hidden="true" aria-label="サイト内メニュー">
+        <a href="#top" class="menu-link">🏠 トップ</a>
+        <a href="#about-us" class="menu-link">About Us</a>
+        <a href="#pillars" class="menu-link">教義（三本柱）</a>
+        <a href="#activities" class="menu-link">Activities</a>
+        <a href="#share" class="menu-link">布教にご協力ください</a>
+        <a href="#gospel" class="menu-link">地を這うペンネの福音</a>
+        <a href="#paper" class="menu-link">統一場理論（論文）</a>
+        <a href="#game" class="menu-link">🍝 ペンネ・キャッチャー</a>
+        <a href="certificate.html" class="menu-link menu-highlight">📜 認定証を作成する</a>
+    </nav>
+
+    <header id="top">
         <div class="rotating-penne-container">
             <div class="penne-3d">
                 <div class="penne-face"></div>
@@ -275,7 +393,7 @@
         <p class="subtitle">Ground-Crawling Penne</p>
     </header>
 
-    <section>
+    <section id="about-us">
         <h2>About Us</h2>
         <p>
             地を這うペンネモンスター教は、ペンネをより地球に普及させ、<strong>すべての皿に完璧なアルデンテをもたらすこと</strong>を目的とした集団です。
@@ -285,7 +403,7 @@
         </p>
     </section>
 
-    <section>
+    <section id="pillars">
         <h2>The Three Pillars</h2>
         <div class="doctrine-grid">
             <div class="card">
@@ -303,7 +421,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="activities">
         <h2>Activities</h2>
         <ul class="activity-list">
             <li><strong>聖なるボイル:</strong> 理想の茹で時間を1秒単位で計測し、学食のパスタ比率におけるペンネの拡大を推進します。</li>
@@ -313,7 +431,7 @@
         </ul>
     </section>
 
-    <section class="share-section">
+    <section id="share" class="share-section">
         <h2 style="text-align:left;">布教にご協力ください</h2>
         <p>この教えに触れたあなたには、フォークを持つ隣人に伝える使命があります。</p>
         <a class="share-btn" target="_blank" rel="noopener"
@@ -324,7 +442,7 @@
     </section>
 
 
-        <h2 class="ja">地を這うペンネの福音</h2>
+        <h2 class="ja" id="gospel">地を這うペンネの福音</h2>
         <div class="card" style="text-align: center; border-top: 4px solid #c0392b;">
             <p class="ja"></p>
             <div style="margin-top: 20px;">
@@ -335,7 +453,7 @@
         </div>
 
 
-    <h2 class="ja">管状パスタにおける空洞誘起対称性の破れとリガーテ格子—ソース結合の統一場理論</h2>
+    <h2 class="ja" id="paper">管状パスタにおける空洞誘起対称性の破れとリガーテ格子—ソース結合の統一場理論</h2>
         <div class="card" style="text-align: center; border-top: 4px solid #c0392b;">
             <p class="ja"></p>
             <div style="margin-top: 20px;">
@@ -356,7 +474,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="game">
         <h2 class="ja">🍝 ペンネ・キャッチャー</h2>
         <div class="card" style="text-align: center; border-top: 4px solid #d35400;">
             <p>空を舞うペンネはいない。だが、皿に落ちてくるペンネならいる。マウス（またはタッチ）で皿を操り、落ちてくるペンネを受け止めよ。5回落とすと教団からの審判が下る。</p>
@@ -536,6 +654,50 @@
         startBtn.addEventListener('click', startGame);
 
         draw();
+    })();
+    </script>
+
+    <script>
+    (function() {
+        var toggleBtn = document.getElementById('menu-toggle');
+        var menu = document.getElementById('site-menu');
+        var overlay = document.getElementById('menu-overlay');
+        if (!toggleBtn || !menu || !overlay) return;
+
+        function openMenu() {
+            menu.classList.add('is-open');
+            overlay.classList.add('is-open');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            menu.setAttribute('aria-hidden', 'false');
+            toggleBtn.setAttribute('aria-label', 'メニューを閉じる');
+        }
+
+        function closeMenu() {
+            menu.classList.remove('is-open');
+            overlay.classList.remove('is-open');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            menu.setAttribute('aria-hidden', 'true');
+            toggleBtn.setAttribute('aria-label', 'メニューを開く');
+        }
+
+        toggleBtn.addEventListener('click', function() {
+            if (menu.classList.contains('is-open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        overlay.addEventListener('click', closeMenu);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+
+        var links = menu.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', closeMenu);
+        }
     })();
     </script>
 
